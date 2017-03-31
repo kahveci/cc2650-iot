@@ -1,0 +1,25 @@
+{
+  "name": "cc2650-iot",
+  "version": "1.0.0",
+  "description": "An IoT application for cc2650 sensor tags.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kahveci/cc2650-iot.git"
+  },
+  "keywords": [
+    "IoT",
+    "IIoT",
+    "cc2650",
+    "SensorTag"
+  ],
+  "author": "Sinan Kahveci",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kahveci/cc2650-iot/issues"
+  },
+  "homepage": "https://github.com/kahveci/cc2650-iot#readme"
+}
