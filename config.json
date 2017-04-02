@@ -1,0 +1,21 @@
+{
+    "sensortag": {
+        "id": "b0b448b8ba81",
+        "type": "cc2650",
+        "sensor": {
+            "IrTemperature": "disabled",
+            "Accelerometer": "disabled",
+            "Gyroscope": "disabled",
+            "Magnetometer": "disabled",
+            "Humidity": "disabled",
+            "BarometricPressure": "disabled",
+            "Luxometer": "enabled"
+        }
+    },
+    "analytics": {
+        "enabled": true,
+        "host": "192.168.200.3",
+        "port": "9200",
+        "path": "/sensortag/"
+    }
+}

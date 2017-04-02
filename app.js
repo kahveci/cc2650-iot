@@ -1,11 +1,202 @@
-var SensorTag = require('./index');
+var sensorTag = require('sensortag');
+var config = require("./config.json");
+var http = require('http');
+var querystring = require('querystring');
+var moment = require('moment');
 
-SensorTag.discover(function(sensorTag) {
-  console.log('Discovered: ' + sensorTag);
+console.log('Listening...');
+var timestampPattern = "YYYY-MM-DD HH:mm:ss";
 
-  sensorTag.on('disconnect', function() {
-    console.log('Disconnected!');
-    process.exit(0);
-  });
+sensorTag.discoverById(config.sensortag.id, function (tag) {
+    console.log('Discovered: ' + tag);
 
+    tag.on('disconnect', function () {
+        console.log('Disconnected!');
+        process.exit(0);
+    });
+
+    function connectAndSetUp() { // attempt to connect to the tag
+        console.log('Connect and set up...');
+        tag.connectAndSetUp(enableSensors); // when you connect, enable sensors
+    }
+
+    function enableSensors() { // attempt to enable sensors
+        tag.notifySimpleKey(listenForButton); // start the button listener
+        console.log('Enabling sensors...');
+
+        // when you enable the sensors, start notifications:
+        if (config.sensortag.sensor.IrTemperature === "enabled") tag.enableIrTemperature(notifyIrTemperature);
+        if (config.sensortag.sensor.Accelerometer === "enabled") tag.enableAccelerometer(notifyAccelerometer);
+        if (config.sensortag.sensor.Gyroscope === "enabled") tag.enableGyroscope(notifyGyroscope);
+        if (config.sensortag.sensor.Magnetometer === "enabled") tag.enableMagnetometer(notifyMagnetometer);
+        if (config.sensortag.sensor.Humidity === "enabled") tag.enableHumidity(notifyHumidity);
+        if (config.sensortag.sensor.BarometricPressure === "enabled") tag.enableBarometricPressure(notifyBarometricPressure);
+        if (config.sensortag.sensor.Luxometer === "enabled") tag.enableLuxometer(notifyLuxometer);
+    }
+
+    function notifyIrTemperature() {
+        // start the accelerometer listener
+        tag.notifyIrTemperature(listenIrTemperature);
+    }
+
+    function notifyAccelerometer() {
+        // start the accelerometer listener
+        tag.notifyAccelerometer(listenAccelerometer);
+    }
+
+    function notifyGyroscope() {
+        tag.notifyGyroscope(listenGyroscope);
+    }
+
+    function notifyMagnetometer() {
+        // start the humidity listener
+        tag.notifyMagnetometer(listenMagnetometer);
+    }
+
+    function notifyHumidity() {
+        // start the humidity listener
+        tag.notifyHumidity(listenHumidity);
+    }
+
+    function notifyBarometricPressure() {
+        tag.notifyBarometricPressure(listenBarometricPressure);
+    }
+
+    function notifyLuxometer() {
+        tag.notifyLuxometer(listenLuxometer);
+    }
+
+    // When you get an accelermeter change, print it out:
+    function listenIrTemperature() {
+        tag.on('irTemperatureChange', function (objectTemp, ambientTemp) {
+            console.log("* * TMP007 IR (infrared) thermopile temperature sensor * *");
+            console.log('\tObject Temp  = %d °C', objectTemp.toFixed(1));
+            console.log('\tAmbient Temp = %d °C', ambientTemp.toFixed(1));
+        });
+    }
+
+    // When you get an accelermeter change, print it out:
+    function listenAccelerometer() {
+        tag.on('accelerometerChange', function (x, y, z) {
+            if (x !== 0 && y !== 0 && z !== 0) {
+                console.log("* * MPU-9450 9-axis motion sensor (3-AXIS Accelerometer) * *");
+                console.log('\tx = %d G', x.toFixed(2));
+                console.log('\ty = %d G', y.toFixed(2));
+                console.log('\tz = %d G', z.toFixed(2));
+            }
+        });
+    }
+
+    function listenGyroscope() {
+        tag.on('gyroscopeChange', function (x, y, z) {
+            if (x !== 0 && y !== 0 && z !== 0) {
+                console.log("* * MPU-9450 9-axis motion sensor (3-AXIS Gyroscope) * *");
+                console.log('\tx = %d °/s', x.toFixed(2));
+                console.log('\ty = %d °/s', y.toFixed(2));
+                console.log('\tz = %d °/s', z.toFixed(2));
+            }
+        });
+    }
+
+    function listenMagnetometer() {
+        tag.on('magnetometerChange', function (x, y, z) {
+            if (x !== 0 && y !== 0 && z !== 0) {
+                console.log("* * MK24 magnetic sensor * *");
+                console.log('\tx = %d μT', x.toFixed(1));
+                console.log('\ty = %d μT', y.toFixed(1));
+                console.log('\tz = %d μT', z.toFixed(1));
+            }
+        });
+    }
+
+    function listenHumidity() {
+        tag.on('humidityChange', function (temperature, humidity) {
+            console.log("* * HDC1000 digital humidity and temperature sensor * *");
+            console.log('\tTemperature = %d °C', temperature.toFixed(1));
+            console.log('\tHumidity    = %d %', humidity.toFixed(1));
+        });
+    }
+
+    function listenBarometricPressure() {
+        tag.on('barometricPressureChange', function (pressure) {
+            // TODO: Check the temperature value of this sensor!
+            console.log("* * BMP280 Barometric pressure & temperature sensor * *");
+            console.log('\tPressure = %d mBar', pressure.toFixed(1));
+        });
+    }
+
+    function listenLuxometer() {
+        tag.on('luxometerChange', function (lux) {
+            //console.log("---> " +lux);
+            if (lux !== 134184.96) {
+                console.log("* * OPT3001 Ambient light sensor * *");
+                console.log('\tLux = %d', lux.toFixed(1));
+                insertAnalytics("luxometer", lux.toFixed(1));
+            }
+        });
+    }
+
+    // when you get a button change, print it out:
+    function listenForButton() {
+        tag.on('simpleKeyChange', function (left, right) {
+            if (left) {
+                console.log('left button: ' + left);
+            }
+            if (right) {
+                console.log('right button: ' + right);
+            }
+            // if both buttons are pressed, disconnect:
+            if (left && right) {
+                tag.disconnect();
+            }
+        });
+    }
+
+
+    function insertAnalytics(type, sensorVal) {
+        if (config.analytics.enabled === false)
+            return;
+
+        var options = {
+            host: config.analytics.host,
+            port: config.analytics.port,
+            path: config.analytics.path + type,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' //,
+                //'Content-Length': Buffer.byteLength(data)
+            }
+        };
+
+        var data = JSON.stringify({
+            tagID: config.sensortag.id,
+            sensorValue: sensorVal,
+            timestamp: moment().format(timestampPattern)
+        });
+
+        var req = http.request(options, function (res) {
+            console.log("Status: " + res.statusCode);
+            console.log("Headers: " + JSON.stringify(res.headers));
+
+            res.setEncoding("utf8");
+            res.on("data", function (body) {
+                console.log("Body: " + body);
+            });
+        });
+        req.on("error", function (e) {
+            console.log("Problem with request: " + e.message);
+        });
+
+        // write data to request body
+        req.write(data);
+        req.end();
+
+        console.log(data);
+        console.log("Http POST successful! Host: " + config.analytics.host + ":" + config.analytics.port + config.analytics.path);
+    }
+
+
+    // Now that you've defined all the functions, start the process:
+    connectAndSetUp();
+    //setTimeout(connectAndSetUp, 2000);
 });
