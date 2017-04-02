@@ -21,5 +21,11 @@
   "bugs": {
     "url": "https://github.com/kahveci/cc2650-iot/issues"
   },
-  "homepage": "https://github.com/kahveci/cc2650-iot#readme"
+  "homepage": "https://github.com/kahveci/cc2650-iot#readme",
+  "dependencies": {
+    "async": "^2.2.0",
+    "moment": "^2.18.1",
+    "sensortag": "^1.3.0",
+    "util": "^0.10.3"
+  }
 }
