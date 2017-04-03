@@ -1,11 +1,8 @@
 var sensorTag = require('sensortag');
-var config = require("./config.json");
-var http = require('http');
-var querystring = require('querystring');
-var moment = require('moment');
+var config = require('./config.json');
+var analytics = require('./analytics');
 
 console.log('Listening...');
-var timestampPattern = "YYYY-MM-DD HH:mm:ss";
 
 sensorTag.discoverById(config.sensortag.id, function (tag) {
     console.log('Discovered: ' + tag);
@@ -72,6 +69,7 @@ sensorTag.discoverById(config.sensortag.id, function (tag) {
             console.log("* * TMP007 IR (infrared) thermopile temperature sensor * *");
             console.log('\tObject Temp  = %d °C', objectTemp.toFixed(1));
             console.log('\tAmbient Temp = %d °C', ambientTemp.toFixed(1));
+            analytics.insertTemperature(objectTemp.toFixed(1), ambientTemp.toFixed(1));
         });
     }
 
@@ -131,7 +129,7 @@ sensorTag.discoverById(config.sensortag.id, function (tag) {
             if (lux !== 134184.96) {
                 console.log("* * OPT3001 Ambient light sensor * *");
                 console.log('\tLux = %d', lux.toFixed(1));
-                insertAnalytics("luxometer", lux.toFixed(1));
+                analytics.insertLuxometer(lux.toFixed(1));
             }
         });
     }
@@ -151,50 +149,6 @@ sensorTag.discoverById(config.sensortag.id, function (tag) {
             }
         });
     }
-
-
-    function insertAnalytics(type, sensorVal) {
-        if (config.analytics.enabled === false)
-            return;
-
-        var options = {
-            host: config.analytics.host,
-            port: config.analytics.port,
-            path: config.analytics.path + type,
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json' //,
-                //'Content-Length': Buffer.byteLength(data)
-            }
-        };
-
-        var data = JSON.stringify({
-            tagID: config.sensortag.id,
-            sensorValue: sensorVal,
-            timestamp: moment().format(timestampPattern)
-        });
-
-        var req = http.request(options, function (res) {
-            console.log("Status: " + res.statusCode);
-            console.log("Headers: " + JSON.stringify(res.headers));
-
-            res.setEncoding("utf8");
-            res.on("data", function (body) {
-                console.log("Body: " + body);
-            });
-        });
-        req.on("error", function (e) {
-            console.log("Problem with request: " + e.message);
-        });
-
-        // write data to request body
-        req.write(data);
-        req.end();
-
-        console.log(data);
-        console.log("Http POST successful! Host: " + config.analytics.host + ":" + config.analytics.port + config.analytics.path);
-    }
-
 
     // Now that you've defined all the functions, start the process:
     connectAndSetUp();
