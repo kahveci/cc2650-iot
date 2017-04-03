@@ -29,6 +29,8 @@ sensorTag.discoverById(config.sensortag.id, function (tag) {
         if (config.sensortag.sensor.Humidity === "enabled") tag.enableHumidity(notifyHumidity);
         if (config.sensortag.sensor.BarometricPressure === "enabled") tag.enableBarometricPressure(notifyBarometricPressure);
         if (config.sensortag.sensor.Luxometer === "enabled") tag.enableLuxometer(notifyLuxometer);
+        // SP40641LU Digital microphone
+        // Buzzer
     }
 
     function notifyIrTemperature() {
@@ -81,6 +83,7 @@ sensorTag.discoverById(config.sensortag.id, function (tag) {
                 console.log('\tx = %d G', x.toFixed(2));
                 console.log('\ty = %d G', y.toFixed(2));
                 console.log('\tz = %d G', z.toFixed(2));
+                analytics.insertAccelerometer(x.toFixed(2), y.toFixed(2), z.toFixed(2));
             }
         });
     }
