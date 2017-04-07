@@ -4,7 +4,7 @@
         "type": "cc2650",
         "sensor": {
             "IrTemperature": "enabled",
-            "Accelerometer": "disabled",
+            "Accelerometer": "enabled",
             "Gyroscope": "disabled",
             "Magnetometer": "disabled",
             "Humidity": "disabled",
