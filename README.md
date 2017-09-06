@@ -11,7 +11,7 @@ An IoT application aiming at implementing cc2650 sensor tags to industrial use c
  * [sensortag](https://github.com/sandeepmistry/node-sensortag)
  * util
  
-## Install
+## How to Run
 ```sh
 node app
 ```
