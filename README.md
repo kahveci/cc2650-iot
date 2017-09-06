@@ -15,3 +15,15 @@ An IoT application aiming at implementing cc2650 sensor tags to industrial use c
 ```sh
 node app
 ```
+
+Support
+-------
+If you're having any problem, please [raise an issue][newissue] on GitHub and
+the I will be happy to help.
+
+License
+-------
+Please take a look at the terms specified in the [license].
+
+[newissue]: https://github.com/kahveci/cc2650-iot/issues/new
+[license]: https://github.com/kahveci/cc2650-iot/blob/master/LICENSE
