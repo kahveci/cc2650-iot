@@ -4,6 +4,7 @@ An IoT application aiming at implementing cc2650 sensor tags to industrial use c
 ## Prerequisites
  * [node-gyp install guide](https://github.com/nodejs/node-gyp#installation)
  * [noble prerequisites](https://github.com/sandeepmistry/noble#prerequisites)
+ * [Elastic Stack](https://www.elastic.co/) for using analytics features
  
 ## Development Dependencies
  * async
