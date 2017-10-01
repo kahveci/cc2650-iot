@@ -6,7 +6,7 @@ An IoT application aiming at implementing cc2650 sensor tags to industrial use c
  * [noble prerequisites](https://github.com/sandeepmistry/noble#prerequisites)
  * [Elastic Stack](https://www.elastic.co/) for using analytics features
  
-## Development Dependencies
+## Dependencies
  * async
  * moment
  * [sensortag](https://github.com/sandeepmistry/node-sensortag)
