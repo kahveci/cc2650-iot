@@ -4,12 +4,12 @@
         "type": "cc2650",
         "sensor": {
             "IrTemperature": "enabled",
-            "Accelerometer": "enabled",
+            "Accelerometer": "disabled",
             "Gyroscope": "disabled",
             "Magnetometer": "disabled",
             "Humidity": "disabled",
             "BarometricPressure": "disabled",
-            "Luxometer": "enabled"
+            "Luxometer": "disabled"
         }
     },
     "analytics": {
