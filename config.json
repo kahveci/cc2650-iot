@@ -13,8 +13,14 @@
         }
     },
     "analytics": {
-        "enabled": true,
+        "enabled": false,
         "host": "192.168.200.3",
         "port": "9200"
+    },
+    "influxdb": {
+        "enabled": true,
+        "host": "18.130.237.209",
+        "port": "8086",
+        "database": "iml"
     }
 }

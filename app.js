@@ -1,6 +1,7 @@
 const sensorTag = require('sensortag');
 const config = require('./config.json');
 const analytics = require('./analytics');
+const influxdb = require('./influxdb');
 
 console.log('Listening for sensortags...');
 
@@ -35,6 +36,7 @@ sensorTag.discoverById(config.sensortag.id, (tag) => {
       console.log('\tObject Temp  = %d °C', objectTemp.toFixed(1));
       console.log('\tAmbient Temp = %d °C', ambientTemp.toFixed(1));
       analytics.insertTemperature(objectTemp.toFixed(1), ambientTemp.toFixed(1));
+      influxdb.insertTemperature(objectTemp.toFixed(1), ambientTemp.toFixed(1));
     });
   }
 
