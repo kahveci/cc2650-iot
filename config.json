@@ -2,15 +2,22 @@
     "sensortag": {
         "id": "b0b448b8ba81",
         "type": "cc2650",
+        "consoleOutput": "disabled",
         "sensor": {
-            "IrTemperature": "enabled",
-            "Accelerometer": "disabled",
-            "Gyroscope": "disabled",
-            "Magnetometer": "disabled",
-            "Humidity": "disabled",
-            "BarometricPressure": "disabled",
-            "Luxometer": "disabled"
+            "irTemperature": "enabled",
+            "accelerometer": "enabled",
+            "gyroscope": "disabled",
+            "magnetometer": "disabled",
+            "humidity": "disabled",
+            "barometricPressure": "disabled",
+            "luxometer": "enabled"
         }
+    },
+    "opcuaServer": {
+        "enabled": true,
+        "port": 4334,
+        "userName": "dev",
+        "password": "abc12345"
     },
     "analytics": {
         "enabled": false,
@@ -18,7 +25,7 @@
         "port": "9200"
     },
     "influxdb": {
-        "enabled": true,
+        "enabled": false,
         "host": "18.130.237.209",
         "port": "8086",
         "database": "iml"
