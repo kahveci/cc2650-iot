@@ -19,10 +19,10 @@ function updateOpcUAServerVariable(opcTag, opcValue) {
 }
 
 sensorTag.discoverById(config.sensortag.id, (tag) => {
-  console.log(`Sensortag discovered: ${tag}`);
+  console.log(`Sensor Tag: discovered -> ${tag}`);
 
   tag.on('disconnect', () => {
-    console.log('Disconnected!');
+    console.log('Sensor Tag: disconnected!');
     process.exit(0);
   });
 
@@ -106,7 +106,6 @@ sensorTag.discoverById(config.sensortag.id, (tag) => {
         console.log('\tTemperature = %d °C', temperature.toFixed(2));
         console.log('\tHumidity    = %d %', humidity.toFixed(2));
       }
-      updateOpcUAServerVariable('luxometer', lux.toFixed(2));
     });
   }
 
@@ -183,7 +182,7 @@ sensorTag.discoverById(config.sensortag.id, (tag) => {
   }
 
   (function connectAndSetUp() { // attempt to connect to the tag
-    console.log('Connect and set up...');
+    console.log('Sensor Tag: connecting and setting up...');
     tag.connectAndSetUp(enableSensors); // when you connect, enable sensors
   }());
 
