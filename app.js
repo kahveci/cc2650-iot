@@ -49,7 +49,7 @@ sensorTag.discoverById(config.sensortag.id, (tag) => {
         console.log('\tObject Temp  = %d °C', objectTemp.toFixed(2));
         console.log('\tAmbient Temp = %d °C', ambientTemp.toFixed(2));
       }
-      updateOpcUAServerVariable('temperature', ambientTemp.toFixed(2));
+      // updateOpcUAServerVariable('temperature', ambientTemp.toFixed(2));
       analytics.insertTemperature(objectTemp.toFixed(2), ambientTemp.toFixed(2));
       influxdb.insertTemperature(objectTemp.toFixed(2), ambientTemp.toFixed(2));
     });
@@ -106,6 +106,8 @@ sensorTag.discoverById(config.sensortag.id, (tag) => {
         console.log('\tTemperature = %d °C', temperature.toFixed(2));
         console.log('\tHumidity    = %d %', humidity.toFixed(2));
       }
+      updateOpcUAServerVariable('temperature', temperature.toFixed(2));
+      updateOpcUAServerVariable('humidity', humidity.toFixed(2));
     });
   }
 
@@ -173,7 +175,7 @@ sensorTag.discoverById(config.sensortag.id, (tag) => {
     if (config.sensortag.sensor.accelerometer === 'enabled') tag.enableAccelerometer(notifyAccelerometer);
     if (config.sensortag.sensor.gyroscope === 'enabled') tag.enableGyroscope(notifyGyroscope);
     if (config.sensortag.sensor.magnetometer === 'enabled') tag.enableMagnetometer(notifyMagnetometer);
-    if (config.sensortag.sensor.humidity === 'enabled') tag.enableHumidity(notifyHumidity);
+    if (config.sensortag.sensor.humidityTemp === 'enabled') tag.enableHumidity(notifyHumidity);
     if (config.sensortag.sensor.barometricPressure === 'enabled') tag.enableBarometricPressure(notifyBarometricPressure);
     if (config.sensortag.sensor.luxometer === 'enabled') tag.enableLuxometer(notifyLuxometer);
     // SP40641LU Digital microphone

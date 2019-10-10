@@ -4,11 +4,11 @@
         "type": "cc2650",
         "consoleOutput": "disabled",
         "sensor": {
-            "irTemperature": "enabled",
+            "irTemperature": "disabled",
             "accelerometer": "enabled",
             "gyroscope": "disabled",
             "magnetometer": "disabled",
-            "humidity": "disabled",
+            "humidityTemp": "enabled",
             "barometricPressure": "disabled",
             "luxometer": "enabled"
         }
