@@ -34,6 +34,12 @@ sensorTag.discoverById(config.sensortag.id, (tag) => {
       }
       if (right) {
         console.log(`right button: ${right}`);
+        tag.readBatteryLevel((error, batteryLevel) => {
+          if (error) {
+            console.log('An error has occurred in reading batteryLevel!');
+          }
+          console.log(`Battery Level: ${batteryLevel} %`);
+        });
       }
       // if both buttons are pressed, disconnect:
       if (left && right) {
@@ -169,10 +175,14 @@ sensorTag.discoverById(config.sensortag.id, (tag) => {
   function enableSensors() { // attempt to enable sensors
     tag.notifySimpleKey(listenForButton); // start the button listener
     console.log('Sensor Tag: enabling sensors...');
+    const period = config.sensortag.period;
 
     // when you enable the sensors, start notifications:
     if (config.sensortag.sensor.irTemperature === 'enabled') tag.enableIrTemperature(notifyIrTemperature);
-    if (config.sensortag.sensor.accelerometer === 'enabled') tag.enableAccelerometer(notifyAccelerometer);
+    if (config.sensortag.sensor.accelerometer === 'enabled') {
+      tag.setAccelerometerPeriod(period);
+      tag.enableAccelerometer(notifyAccelerometer);
+    }
     if (config.sensortag.sensor.gyroscope === 'enabled') tag.enableGyroscope(notifyGyroscope);
     if (config.sensortag.sensor.magnetometer === 'enabled') tag.enableMagnetometer(notifyMagnetometer);
     if (config.sensortag.sensor.humidityTemp === 'enabled') tag.enableHumidity(notifyHumidity);

@@ -3,6 +3,7 @@
         "id": "b0b448b8ba81",
         "type": "cc2650",
         "consoleOutput": "disabled",
+        "period": 2550,
         "sensor": {
             "irTemperature": "disabled",
             "accelerometer": "enabled",
